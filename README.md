@@ -1,0 +1,1 @@
+This is the Start point template for Go web Application development
