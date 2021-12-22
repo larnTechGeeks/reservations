@@ -1,0 +1,20 @@
+.custom-footer {
+    background-color: #434647;
+    margin-top: 1.5em;
+    padding: 1em;
+    color: #ffff;
+
+}
+
+.room-img {
+    max-width: 60%;
+}
+
+/* override styles here */
+.notie-container {
+    box-shadow: none;
+}
+
+.datepicker {
+    z-index: 10000;
+}

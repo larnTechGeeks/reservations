@@ -2,13 +2,14 @@ package helpers
 
 import (
 	"bytes"
+	"github.com/larnTechGeeks/reservations/internal/config"
+	"github.com/larnTechGeeks/reservations/internal/models"
 	"log"
 	"net/http"
 	"path/filepath"
 	"text/template"
 
-	"github.com/larnTechGeeks/reservations/pkg/config"
-	"github.com/larnTechGeeks/reservations/pkg/models"
+	"github.com/justinas/nosurf"
 )
 
 var functions = template.FuncMap{}
@@ -19,11 +20,12 @@ func AddAppConfig(a *config.AppConfig) {
 	app = a
 }
 
-func AddGlobalData(td *models.TemplateData) *models.TemplateData {
+func AddGlobalData(td *models.TemplateData, r *http.Request) *models.TemplateData {
+	td.CSRFToken = nosurf.Token(r)
 	return td
 }
 
-func RenderTemplate(rw http.ResponseWriter, tmpl string, td *models.TemplateData) {
+func RenderTemplate(rw http.ResponseWriter, r *http.Request, tmpl string, td *models.TemplateData) {
 	var tc map[string]*template.Template
 	var err error
 	if app.DEBUG {
@@ -47,7 +49,7 @@ func RenderTemplate(rw http.ResponseWriter, tmpl string, td *models.TemplateData
 		// build a buffer
 		buf := new(bytes.Buffer)
 		// add global context data before execute
-		td = AddGlobalData(td)
+		td = AddGlobalData(td, r)
 		t.Execute(buf, td)
 
 		//write buffer to rw

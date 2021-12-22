@@ -1,0 +1,115 @@
+{{template "base" .}}
+
+
+{{define "content"}}
+
+<div class="container">
+
+    <div class="row">
+        <div class="col">
+            <img src="/static/images/generals-quarters.png" class="image-fluid mx-auto d-block img-thumbnail room-img"
+                alt="Room Image" srcset="">
+        </div>
+    </div>
+
+    <!-- First Row -->
+    <div class="row">
+        <div class="col">
+            <h1 class="text-center mt-4">Single Room</h1>
+            <p>Get a Home just by the click of a button. We are here to make your home search as painless as
+                possible. We offer the best plartform for landlords and Agents
+                to showcase there rooms for ease of booking and accessibility by the public at large.
+            </p>
+        </div>
+    </div>
+
+    <!-- End First Row -->
+
+    <!-- second Row -->
+    <div class="row">
+        <div class="col text-center">
+            <a id="check-availability-btn" href="#!" class="btn btn-success">Make Reservation Now</a>
+        </div>
+    </div>
+    <!-- End second Row -->
+</div>
+
+{{end}}
+
+{{define "js"}}
+<script>
+
+    // test btn
+    let testbtn = document.getElementById('check-availability-btn')
+    testbtn.addEventListener('click', () => {
+        // Notify("Hello Vincent", "success")
+        // SNotify()
+
+        // NotifyModal(title, text, icon, confirmationBtnText)
+        // userPrompts.toast({ msg: "Toast Me", icon: "error" })
+        // '<a href="/">Fill Alerts</a>'
+        //userPrompts.success({ msg: "Toast Me", footer: '<a href="/">Fill Alerts</a>' });
+
+        // create HTML Form
+        const html = `
+                <form id="check-availability-form" action="" method="post" novalidate class="needs-validation">
+                    <div class="form-row"> 
+                        <div class="col">
+                            <div class="form-row" id="reservation-dates-modal">
+                                <div class="col p-2">
+                                    <input type="text" disabled required class="form-control" id="start" name="start" placeholder="Arrival Date" />
+                                </div>
+                                <div class="col p-2">
+                                    <input type="text" disabled required class="form-control" id="end" name="end" placeholder="Departure Date" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            `;
+
+        userPrompts.custom({
+            msg: html,
+            title: "Choose Your Dates",
+            preConfirm: () => {
+                return [
+                    document.getElementById('start').value,
+                    document.getElementById('end').value
+                ]
+            },
+            willOpen: () => {
+                let elem2 = document.getElementById('reservation-dates-modal');
+                new DateRangePicker(elem2, {
+                    format: "yyyy-mm-dd",
+                    showOnFocus: true
+                })
+            },
+            didOpen: () => {
+                document.getElementById('start').removeAttribute('disabled')
+                document.getElementById('end').removeAttribute('disabled')
+            },
+            callback: function (result) {
+                // get the form data 
+                form = document.getElementById('check-availability-form')
+
+                formData = new FormData(form)
+                // append the CSRFToken to Data
+                formData.append("csrf_token", "{{.CSRFToken}}")
+                // use fetch package to fetch for data
+                fetch("/search-availability-json", {
+                    method: "post",
+                    body: formData
+                })
+                    .then(res => {
+                        return res.json()
+                    })
+                    .then(data => {
+                        console.log(data)
+                    })
+            }
+        });
+    })
+
+
+</script>
+{{end}}

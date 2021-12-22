@@ -1,14 +1,14 @@
 package main
 
 import (
+	"github.com/larnTechGeeks/reservations/internal/config"
+	"github.com/larnTechGeeks/reservations/internal/handlers"
+	"github.com/larnTechGeeks/reservations/internal/helpers"
 	"log"
 	"net/http"
 	"time"
 
 	"github.com/alexedwards/scs/v2"
-	"github.com/larnTechGeeks/reservations/pkg/config"
-	"github.com/larnTechGeeks/reservations/pkg/handlers"
-	"github.com/larnTechGeeks/reservations/pkg/helpers"
 )
 
 const defaultPort = ":8080"

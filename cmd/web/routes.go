@@ -1,12 +1,12 @@
 package main
 
 import (
+	"github.com/larnTechGeeks/reservations/internal/config"
+	"github.com/larnTechGeeks/reservations/internal/handlers"
 	"net/http"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
-	"github.com/larnTechGeeks/reservations/pkg/config"
-	"github.com/larnTechGeeks/reservations/pkg/handlers"
 )
 
 func routes(app *config.AppConfig) http.Handler {
@@ -21,6 +21,15 @@ func routes(app *config.AppConfig) http.Handler {
 	// routes
 	mux.Get("/", handlers.Repo.HomePage)
 	mux.Get("/about", handlers.Repo.AboutPage)
+	mux.Get("/contact", handlers.Repo.Contact)
+
+	mux.Get("/majors-suite", handlers.Repo.Majors)
+	mux.Get("/generals-quaters", handlers.Repo.Generals)
+	mux.Get("/make-reservation", handlers.Repo.Reservation)
+
+	mux.Get("/search-availability", handlers.Repo.Availability)
+	mux.Post("/search-availability", handlers.Repo.PostAvailability)
+	mux.Post("/search-availability-json", handlers.Repo.AvailabilityJSON)
 
 	// build a File Server
 	fileServer := http.FileServer(http.Dir("./static/"))
